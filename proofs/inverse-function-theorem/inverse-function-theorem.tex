@@ -1,0 +1,569 @@
+\documentclass{article}
+
+% Language setting
+\usepackage[english]{babel}
+
+% Set page size and margins
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{amssymb} % ADDED: For math symbols like \mathbb{R}
+\usepackage{amsthm}  % ADDED: For formatting Theorems and Definitions
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+% --- THEOREM DEFINITIONS ---
+% This tells LaTeX to create numbered environments for Theorems and Definitions
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+
+\title{Inverse Function Theorem}
+\author{Author: Ivan Zhukau}
+
+\begin{document}
+\maketitle
+
+In multivariable calculus, the Inverse Function Theorem provides the mathematical conditions under which a complex system can be reverse-engineered. It relies heavily on the properties of the Jacobian matrix.
+
+% --- THE THEOREM ---
+\begin{theorem}[Multivariable Inverse Function Theorem]
+Let $\mathbf{f} : \mathbb{R}^n \to \mathbb{R}^n$ be a continuously differentiable function defined on an open set containing a point $\mathbf{a}$. Let $\mathbf{b} = \mathbf{f}(\mathbf{a})$.
+
+If the Jacobian matrix of $\mathbf{f}$ at point $\mathbf{a}$, denoted as $J_{\mathbf{f}}(\mathbf{a})$, is invertible---meaning its determinant is non-zero:
+\[
+    \det(J_{\mathbf{f}}(\mathbf{a})) \neq 0
+\]
+Then, the following three conditions hold true:
+\begin{enumerate}
+    \item \textbf{Local Invertibility:} There exists an open neighborhood $U$ around $\mathbf{a}$ and an open neighborhood $V$ around $\mathbf{b}$ such that $\mathbf{f}$ is a bijection from $U$ to $V$. Within this local space, the inverse function $\mathbf{f}^{-1}$ strictly exists.
+
+    \item \textbf{Differentiability of the Inverse:} The inverse function $\mathbf{f}^{-1}$ is continuously differentiable on $V$.
+
+    \item \textbf{The Inverse Jacobian:} The Jacobian matrix of the inverse function at $\mathbf{b}$ is exactly equal to the mathematical matrix inverse of the Jacobian of the original function at $\mathbf{a}$. Formally:
+    \[
+        J_{\mathbf{f}^{-1}}(\mathbf{b}) = [J_{\mathbf{f}}(\mathbf{a})]^{-1}
+    \]
+\end{enumerate}
+\end{theorem}
+
+% --- PROOF OF POINT 1 ---
+\begin{proof}[Proof of Point 1: Local Invertibility]
+
+\textbf{Step 1: Setting up the problem.} \\
+
+We want to prove that, near point $\mathbf{a}$, the equation $\mathbf{f(x)=y}$ has exactly one solution $\mathbf{x}$ for every point $\mathbf{y}$. We know that the theorem states that $\mathbf{det(A) \ne 0} \rightarrow \exists A^{-1}$.
+
+Let us $\mathbf{A}$ represent the Jacobian matrix evaluated at point a:
+\[
+    A = J_f(a)
+\]
+
+We want to know how to solve $\mathbf{f(x) = y}$. Multiply both sides by $\mathbf{A^{-1}}$:
+
+\[
+    A^{-1}f(x) = A^{-1}y
+\]
+
+Then rearrange:
+
+\[
+    A^{-1}(f(x) - y) = 0
+\]
+
+\[
+    x - A^{-1}(f(x) - y) = x
+\]
+
+
+\textbf{Step 2: Creating a new function.} \\
+
+Let us define the left-hand side of the equation above as a new function:
+
+\[
+\Phi_y(x) = x - A^{-1}(f(x) - y)
+\]
+
+And note that solving $\mathbf{f(x) = y}$ is exactly the same as finding a fixed point for $\Phi_y(x) = x$.
+
+\textbf{Step 3: Analyzing the derivative (Jacobian).} \\
+
+Let us find a Jacobian matrix for $\mathbf{\Phi_y(x)}$ with respect to $\mathbf{x}$.
+
+We will use the rules of Matrix differentiation. We take the derivative respect to $\mathbf{x}$.
+
+\begin{enumerate}
+    \item The derivative of the identity mapping $\mathbf{x}$ is the Identity Matrix, $\mathbf{I}$.
+
+    \item Term 2 $\mathbf{(A^{-1}(f(x) - y)):}$ $\mathbf{A^{-1}}$ is a constant matrix, so it stays out front.
+        \begin{enumerate}
+            \item The derivative of $\mathbf{f(x)}$ is $\mathbf{J_f(x)}$.
+            \item The derivative of the constant vector $\mathbf{y}$ is 0.
+        \end{enumerate}
+\end{enumerate}
+
+Putting it together:
+\[
+    J_{\Phi(x)}=I - A^{-1} J_f(x)
+\]
+
+Now evaluate our this derivative specially at point a:
+
+\[
+J_{\Phi(x)}(a) = I - A^{-1} J_f(a)
+\]
+
+but
+
+\[
+J_f(a) = A
+\]
+
+So
+
+\[
+J_{\Phi}(a) = I - A^{-1}A = I - I = 0
+\]
+
+\textbf{Step 4: The Contraction Mapping.} \\
+We know that $\mathbf{f \in C^1}$ if and only if all of its component functions $(f_1, \dots, f_n)$ have continuous partial derivatives.
+
+$$J_{\mathbf{f}}(\mathbf{x}) = \begin{pmatrix}
+\frac{\partial f_1}{\partial x_1} & \dots & \frac{\partial f_1}{\partial x_n} \\
+\vdots & \ddots & \vdots \\
+\frac{\partial f_n}{\partial x_1} & \dots & \frac{\partial f_n}{\partial x_n}
+\end{pmatrix}$$
+
+If we assume $\mathbf{f}$ to be $C^1$, we explicitly state that every cell in that matrix is a continuous function of $\mathbf{x}$.
+
+Let us consider the \textbf{Frobenius norm}:
+
+$$\|J_{\Phi_y}(\mathbf{x})\|_F = \sqrt{\sum_{i=1}^n \sum_{j=1}^n |g_{ij}(\mathbf{x})|^2}$$
+
+Notice:
+\begin{enumerate}
+    \item If $g_{ij}(\mathbf{x})$ is continuous, then its square $(g_{ij}(\mathbf{x}))^2$ is continuous.
+    \item The sum of continuous functions is continuous.
+    \item The square root of a continuous function is continuous (where the inside is non-negative).
+\end{enumerate}
+
+That means that the mapping $\mathbf{x} \mapsto \|J_{\Phi_y}(\mathbf{x})\|_F$ is continuous.
+
+We know from \textbf{Step 3} that $J_{\Phi_y}(\mathbf{a}) = 0$, and therefore $\|J_{\Phi_y}(\mathbf{a})\|_F = 0$.
+
+Because $h(\mathbf{x}) = \|J_{\Phi_y}(\mathbf{x})\|_F$ is continuous, we can apply the $\epsilon$-$\delta$ definition of continuity. If we choose an error of $\epsilon = \frac{1}{2}$, there must exist some radius $r_0 > 0$ and $r < r_0$ such that:
+
+$$\|\mathbf{x} - \mathbf{a}\| \le r < r_0 \implies |\|J_{\Phi}(\mathbf{x})\| - \|J_{\Phi}(\mathbf{a})\|| < \frac{1}{2}$$
+
+Substituting $\|J_{\Phi}(\mathbf{a})\| = 0$, we find that for all $\mathbf{x}$ in the closed ball $\overline{B_r(\mathbf{a})}$:$$\|J_{\Phi}(\mathbf{x})\| < \frac{1}{2}$$
+
+For any two points $\mathbf{x_1}, \mathbf{x_2} \in \overline{B_r(\mathbf{a})}$. Since the closed ball $\overline{B_r(\mathbf{a})}$ is convex, the line segment $[\mathbf{x_1}, \mathbf{x_2}]$ lies  entirely in $\overline{B_r(\mathbf{a})}$. let's use \textbf{Multivariable Mean Value Inequality}:$$\|\Phi_y(\mathbf{x_1}) - \Phi_y(\mathbf{x_2})\| \leq \left( \sup_{\mathbf{z} \in [\mathbf{x_1}, \mathbf{x_2}]} \|J_{\Phi}(\mathbf{z})\| \right) \|\mathbf{x_1} - \mathbf{x_2}\|$$Since we proved that $\|J_{\Phi}(\mathbf{z})\| < \frac{1}{2}$ for every point in this ball, we conclude:$$\|\Phi_y(\mathbf{x_1}) - \Phi_y(\mathbf{x_2})\| \leq \frac{1}{2} \|\mathbf{x_1} - \mathbf{x_2}\|$$
+
+\textbf{Step 5: Showing that $\Phi_y$ maps a closed ball into itself.} \\
+
+Our goal is to apply the Banach Fixed-Point Theorem. For that, it is not enough to know that $\Phi_y$ is a contraction; we must also show that it sends a complete metric space into itself.
+
+So we now want to prove that there exists a closed ball centered at $\mathbf{a}$ such that
+\[
+\Phi_y(X)\subseteq X.
+\]
+
+We define
+\[
+X=\overline{B_r(\mathbf{a})},
+\]
+the closed ball of radius $r$ centered at $\mathbf{a}$. Since $X$ is a closed subset of $\mathbb{R}^n$, and $\mathbb{R}^n$ is complete, the space $X$ is also complete.
+
+Next, let
+\[
+\mathbf{b}=\mathbf{f}(\mathbf{a}).
+\]
+In the future, we want to solve the equation
+\[
+\mathbf{f}(\mathbf{x})=\mathbf{y}
+\]
+for $\mathbf{y}$ close to $\mathbf{b}$. For that reason, we restrict $\mathbf{y}$ to a small neighborhood of $\mathbf{b}$.
+
+Choose $\delta>0$ such that
+\[
+\|A^{-1}\|\delta \le \frac r2,
+\]
+and define
+\[
+V=B_\delta(\mathbf{b}).
+\]
+
+Now fix any $\mathbf{y}\in V$. We want to prove that for every $\mathbf{x}\in X$, the point $\Phi_y(\mathbf{x})$ also belongs to $X$. By definition of $X$, this means that we must show
+\[
+\|\Phi_y(\mathbf{x})-\mathbf{a}\|\le r.
+\]
+
+To estimate this quantity, we compare $\Phi_y(\mathbf{x})$ first with $\Phi_y(\mathbf{a})$, and then compare $\Phi_y(\mathbf{a})$ with $\mathbf{a}$. This is the key idea of the argument.
+
+First, let us estimate $\Phi_y(\mathbf{a})$. By definition of $\Phi_y$,
+\[
+\Phi_y(\mathbf{a})
+=
+\mathbf{a}-A^{-1}(\mathbf{f}(\mathbf{a})-\mathbf{y}).
+\]
+Since $\mathbf{b}=\mathbf{f}(\mathbf{a})$, this becomes
+\[
+\Phi_y(\mathbf{a})
+=
+\mathbf{a}-A^{-1}(\mathbf{b}-\mathbf{y})
+=
+\mathbf{a}+A^{-1}(\mathbf{y}-\mathbf{b}).
+\]
+Subtracting $\mathbf{a}$ from both sides, we get
+\[
+\Phi_y(\mathbf{a})-\mathbf{a}=A^{-1}(\mathbf{y}-\mathbf{b}).
+\]
+Therefore, using the matrix norm inequality,
+\[
+\|\Phi_y(\mathbf{a})-\mathbf{a}\|
+=
+\|A^{-1}(\mathbf{y}-\mathbf{b})\|
+\le
+\|A^{-1}\|\,\|\mathbf{y}-\mathbf{b}\|.
+\]
+Because $\mathbf{y}\in V=B_\delta(\mathbf{b})$, we have
+\[
+\|\mathbf{y}-\mathbf{b}\|<\delta.
+\]
+Hence,
+\[
+\|\Phi_y(\mathbf{a})-\mathbf{a}\|
+<
+\|A^{-1}\|\delta
+\le
+\frac r2.
+\]
+
+So we have shown that $\Phi_y(\mathbf{a})$ lies within distance $r/2$ of the center $\mathbf{a}$.
+
+Now let $\mathbf{x}\in X$. Since $X=\overline{B_r(\mathbf{a})}$, by definition we have
+\[
+\|\mathbf{x}-\mathbf{a}\|\le r.
+\]
+
+From Step 4, we already know that $\Phi_y$ is a contraction on $X$ with contraction constant $\frac12$. Therefore,
+\[
+\|\Phi_y(\mathbf{x})-\Phi_y(\mathbf{a})\|
+\le
+\frac12\|\mathbf{x}-\mathbf{a}\|.
+\]
+Since $\|\mathbf{x}-\mathbf{a}\|\le r$, this gives
+\[
+\|\Phi_y(\mathbf{x})-\Phi_y(\mathbf{a})\|
+\le
+\frac r2.
+\]
+
+Thus, we now have two estimates:
+\[
+\|\Phi_y(\mathbf{x})-\Phi_y(\mathbf{a})\|\le \frac r2
+\quad\text{and}\quad
+\|\Phi_y(\mathbf{a})-\mathbf{a}\|\le \frac r2.
+\]
+
+We combine them using the triangle inequality:
+\[
+\|\Phi_y(\mathbf{x})-\mathbf{a}\|
+\le
+\|\Phi_y(\mathbf{x})-\Phi_y(\mathbf{a})\|
++
+\|\Phi_y(\mathbf{a})-\mathbf{a}\|.
+\]
+Substituting the two bounds obtained above, we find
+\[
+\|\Phi_y(\mathbf{x})-\mathbf{a}\|
+\le
+\frac r2+\frac r2
+=
+r.
+\]
+
+Therefore,
+\[
+\Phi_y(\mathbf{x})\in \overline{B_r(\mathbf{a})}=X.
+\]
+Since $\mathbf{x}\in X$ was arbitrary, we conclude that
+\[
+\Phi_y(X)\subseteq X.
+\]
+
+This is exactly what we needed for the next step: now $\Phi_y$ is not only a contraction, but a contraction from the complete metric space $X$ into itself. Therefore, in the next step we may apply the Banach Fixed-Point Theorem.
+
+\textbf{Step 6: Conclusion via Banach Fixed-Point Theorem.} \\
+
+\textbf{Definition.} Let $(X, d)$ be a metric space with metric $d(x, y)$. Then a map $T: X \to X$ is called a \textit{contraction mapping} on $X$ if there exists a nonnegative constant $q < 1$ such that
+\[
+d(T(x), T(y)) \le q d(x, y)
+\]
+for all $x, y \in X$.
+
+From \textbf{step 4} we know that $\Phi_y(x)$ is a contraction mapping.
+
+\begin{theorem}[Banach Fixed-Point Theorem]
+Let $(X, d)$ be a non-empty complete metric space with a contraction mapping $T: X \to X$. Then $T$ admits a unique fixed point $x^* \in X$, such that $T(x^*) = x^*$.
+\end{theorem}
+
+Applying the \textbf{Banach Fixed-Point Theorem} to our mapping $\Phi_y(x)$:
+\begin{enumerate}
+    \item \textbf{Completeness:} Since $X$ is a closed subset of a complete metric space (e.g., $\mathbb{R}^n$), $(X, d)$ is itself a complete metric space.
+    \item \textbf{Contraction:} As shown in \textbf{Step 4}, $\Phi_y$ is a contraction mapping with constant $q < 1$.
+\end{enumerate}
+
+Therefore, there exists a \textbf{unique} fixed point $x^* \in X$ such that:
+\[
+\Phi_y(x^*) = x^*
+\]
+By the definition of our mapping $\Phi_y$, this fixed point $x^*$ is the unique solution to the equation $\Phi_y(x) = x - A^{-1}(f(x) - y)$  within the neighborhood $X$. This completes the proof of existence and uniqueness.
+
+Thus, for every $\mathbf{y}\in V$, the Banach Fixed-Point Theorem gives a unique point $\mathbf{x}^*\in X$ such that
+\[
+\Phi_y(\mathbf{x}^*)=\mathbf{x}^*.
+\]
+By the definition of $\Phi_y$, this is equivalent to
+\[
+\mathbf{f}(\mathbf{x}^*)=\mathbf{y}.
+\]
+Hence, for every $\mathbf{y}\in V$, there exists a unique point $\mathbf{x}^*\in X$ such that
+\[
+\mathbf{f}(\mathbf{x}^*)=\mathbf{y}.
+\]
+
+In particular, taking $\mathbf{y}=\mathbf{b}=\mathbf{f}(\mathbf{a})$, we see that $\mathbf{a}$ is a fixed point of $\Phi_{\mathbf{b}}$, since
+\[
+\Phi_{\mathbf{b}}(\mathbf{a})
+=
+\mathbf{a}-A^{-1}(\mathbf{f}(\mathbf{a})-\mathbf{b})
+=
+\mathbf{a}.
+\]
+By uniqueness of the fixed point in $X$, this implies that $\mathbf{a}$ is the unique point of $X$ such that
+\[
+\mathbf{f}(\mathbf{x})=\mathbf{b}.
+\]
+
+Now let
+\[
+\partial X=\{\mathbf{x}\in\mathbb{R}^n:\|\mathbf{x}-\mathbf{a}\|=r\}
+\]
+be the boundary of $X$. Since $\partial X$ is compact and $\mathbf{f}$ is continuous, the set $\mathbf{f}(\partial X)$ is compact. Moreover, because $\mathbf{a}$ is the unique point of $X$ satisfying $\mathbf{f}(\mathbf{x})=\mathbf{b}$, and $\mathbf{a}$ lies in the interior of $X$, we must have
+\[
+\mathbf{b}\notin \mathbf{f}(\partial X).
+\]
+Since $\mathbf{f}(\partial X)$ is compact and $\mathbf{b}\notin \mathbf{f}(\partial X)$, the distance from $\mathbf{b}$ to $\mathbf{f}(\partial X)$ is strictly positive. Define
+\[
+d:=\operatorname{dist}\bigl(\mathbf{b},\mathbf{f}(\partial X)\bigr)>0,
+\]
+and choose $0<\delta'<\min\{\delta,d\}$. Set
+\[
+V':=B_{\delta'}(\mathbf{b}).
+\]
+Then $V'$ is an open neighborhood of $\mathbf{b}$ contained in $V$, and by construction
+\[
+V'\cap \mathbf{f}(\partial X)=\varnothing.
+\]
+
+We now define
+\[
+U:=B_r(\mathbf{a})\cap \mathbf{f}^{-1}(V').
+\]
+Since both $B_r(\mathbf{a})$ and $\mathbf{f}^{-1}(V')$ are open, $U$ is open. Also, $\mathbf{a}\in U$ because $\mathbf{f}(\mathbf{a})=\mathbf{b}\in V'$.
+
+We claim that
+\[
+\mathbf{f}:U\to V'
+\]
+is bijective.
+
+First, let $\mathbf{y}\in V'$. Since $V'\subseteq V$, the previous argument gives a unique point $\mathbf{x}^*\in X$ such that
+\[
+\mathbf{f}(\mathbf{x}^*)=\mathbf{y}.
+\]
+We show that in fact $\mathbf{x}^*\in B_r(\mathbf{a})$. Indeed, if $\mathbf{x}^*\in\partial X$, then
+\[
+\mathbf{y}=\mathbf{f}(\mathbf{x}^*)\in \mathbf{f}(\partial X),
+\]
+which contradicts $V'\cap \mathbf{f}(\partial X)=\varnothing$. Hence $\mathbf{x}^*$ lies in the interior of $X$, that is,
+\[
+\mathbf{x}^*\in B_r(\mathbf{a}).
+\]
+Since also $\mathbf{f}(\mathbf{x}^*)=\mathbf{y}\in V'$, we have $\mathbf{x}^*\in U$. Therefore, $\mathbf{f}:U\to V'$ is surjective.
+
+Next, we prove injectivity. Let $\mathbf{x}_1,\mathbf{x}_2\in U$ and suppose that
+\[
+\mathbf{f}(\mathbf{x}_1)=\mathbf{f}(\mathbf{x}_2)=\mathbf{y}
+\]
+for some $\mathbf{y}\in V'$. Because $U\subset B_r(\mathbf{a})\subset X$, both $\mathbf{x}_1$ and $\mathbf{x}_2$ belong to $X$. But for each $\mathbf{y}\in V\supset V'$, we already proved that there exists a unique point of $X$ mapped to $\mathbf{y}$. Therefore,
+\[
+\mathbf{x}_1=\mathbf{x}_2.
+\]
+So $\mathbf{f}:U\to V'$ is injective.
+
+We conclude that there exist open neighborhoods $U$ of $\mathbf{a}$ and $V'$ of $\mathbf{b}$ such that
+\[
+\mathbf{f}:U\to V'
+\]
+is bijective. This proves the local invertibility of $\mathbf{f}$ near $\mathbf{a}$.
+
+\end{proof}
+
+
+\begin{proof}[Proof of Point 2 and 3: Differentiability and Inverse Jacobian]
+
+\textbf{Step 1: Proving the inverse function is Lipschitz Continuous.} \\
+Before we take the derivative, we must ensure the inverse function $\mathbf{g} = \mathbf{f}^{-1}$ must be continuous. We can prove this using the contraction mapping property from Point 1.
+
+Recall from Point 1, Step 4 that for any $\mathbf{x_1}, \mathbf{x_2}$ in our neighborhood:
+\[
+    \|\Phi_y(\mathbf{x_1}) - \Phi_y(\mathbf{x_2})\| \leq \frac{1}{2} \|\mathbf{x_1} - \mathbf{x_2}\|
+\]
+By the definition of $\Phi$, this means:
+\[
+    \left\| (\mathbf{x_1} - \mathbf{x_2}) - A^{-1}(\mathbf{f}(\mathbf{x_1}) - \mathbf{f}(\mathbf{x_2})) \right\| \leq \frac{1}{2} \|\mathbf{x_1} - \mathbf{x_2}\|
+\]
+By the reverse triangle inequality ($\|u\| - \|v\| \leq \|u - v\|$), we can write:
+\[
+    \|\mathbf{x_1} - \mathbf{x_2}\| - \|A^{-1}(\mathbf{f}(\mathbf{x_1}) - \mathbf{f}(\mathbf{x_2}))\| \leq \frac{1}{2} \|\mathbf{x_1} - \mathbf{x_2}\|
+\]
+Rearranging this gives:
+\[
+    \frac{1}{2} \|\mathbf{x_1} - \mathbf{x_2}\| \leq \|A^{-1}\| \|\mathbf{f}(\mathbf{x_1}) - \mathbf{f}(\mathbf{x_2})\|
+\]
+Since $\mathbf{g}(\mathbf{y}) = \mathbf{x}$, we can substitute $\mathbf{x}$ with $\mathbf{g}(\mathbf{y})$:
+\[
+    \|\mathbf{g}(\mathbf{y_1}) - \mathbf{g}(\mathbf{y_2})\| \leq 2\|A^{-1}\| \|\mathbf{y_1} - \mathbf{y_2}\|
+\]
+Because $\|A^{-1}\|$ is just a constant, this proves $\mathbf{g}$ is Lipschitz continuous. Crucially, as $\mathbf{y} \to \mathbf{y_0}$, it is guaranteed that $\mathbf{x} \to \mathbf{x_0}$.
+
+\textbf{Step 2: Defining the derivative of the original function.} \\
+
+Let us use differentiability in the sense of Fréchet.
+Because $\mathbf{f}$ is differentiable at $\mathbf{x_0}$, we can write it using a linear approximation plus a remainder term $R(\mathbf{x})$:
+\[
+    \mathbf{f}(\mathbf{x}) - \mathbf{f}(\mathbf{x_0}) = J_{\mathbf{f}}(\mathbf{x_0})(\mathbf{x} - \mathbf{x_0}) + R(\mathbf{x})
+\]
+By the definition of differentiability, the remainder goes to zero faster than the distance:
+\[
+    \lim_{\mathbf{x} \to \mathbf{x_0}} \frac{\|R(\mathbf{x})\|}{\|\mathbf{x} - \mathbf{x_0}\|} = 0
+\]
+
+\textbf{Step 3: Evaluating the limit for the inverse function.} \\
+
+Since $\mathbf f\in C^1$, the map $\mathbf x\mapsto J_{\mathbf f}(\mathbf x)$ is continuous, and hence
+\[
+\mathbf x\mapsto \det(J_{\mathbf f}(\mathbf x))
+\]
+is continuous. Because
+\[
+\det(J_{\mathbf f}(\mathbf a))\neq 0,
+\]
+there exists an open neighborhood $U_0$ of $\mathbf a$ such that
+\[
+\det(J_{\mathbf f}(\mathbf x))\neq 0
+\quad \text{for all } \mathbf x\in U_0.
+\]
+
+Let
+\[
+U_1:=U\cap U_0.
+\]
+Since $U$ and $U_0$ are open neighborhoods of $\mathbf a$, the set $U_1$ is also an open neighborhood of $\mathbf a$. Define
+\[
+V_1:=\mathbf f(U_1)\subseteq V'.
+\]
+Since $\mathbf f:U\to V'$ is bijective, its restriction
+\[
+\mathbf f:U_1\to V_1
+\]
+is also bijective. Let
+\[
+\mathbf g_1:V_1\to U_1
+\]
+denote the inverse of this restricted map.
+
+Therefore, for every $\mathbf y_0\in V_1$, if we set
+\[
+\mathbf x_0=\mathbf g_1(\mathbf y_0),
+\]
+then
+\[
+\mathbf x_0\in U_1\subseteq U_0.
+\]
+Hence $J_{\mathbf f}(\mathbf x_0)$ is invertible, so the matrix
+\[
+[J_{\mathbf f}(\mathbf x_0)]^{-1}
+\]
+is well-defined.
+
+
+Let $\mathbf{y_0} \in V_1$ and $\mathbf{x_0} = \mathbf{g_1}(\mathbf{y_0})$. We hypothesize that the Jacobian of the inverse is the inverse of the Jacobian: $J_{\mathbf{g_1}}(\mathbf{y_0}) = [J_{\mathbf{f}}(\mathbf{x_0})]^{-1}$. But we must prove that $det(J_f(x_0)) \ne 0$.
+
+
+To prove this, we must show that the following limit equals $0$:
+\[
+    L = \lim_{\mathbf{y} \to \mathbf{y_0}} \frac{\|\mathbf{g_1}(\mathbf{y}) - \mathbf{g_1}(\mathbf{y_0}) - [J_{\mathbf{f}}(\mathbf{x_0})]^{-1}(\mathbf{y} - \mathbf{y_0})\|}{\|\mathbf{y} - \mathbf{y_0}\|}
+\]
+Substitute $\mathbf{y} = \mathbf{f}(\mathbf{x})$ and $\mathbf{g_1}(\mathbf{y}) = \mathbf{x}$. Because $\mathbf{g_1}$ is continuous (from Step 1), as $\mathbf{y} \to \mathbf{y_0}$, we can change the limit to $\mathbf{x} \to \mathbf{x_0}$:
+\[
+    L = \lim_{\mathbf{x} \to \mathbf{x_0}} \frac{\|\mathbf{x} - \mathbf{x_0} - [J_{\mathbf{f}}(\mathbf{x_0})]^{-1}(\mathbf{f}(\mathbf{x}) - \mathbf{f}(\mathbf{x_0}))\|}{\|\mathbf{f}(\mathbf{x}) - \mathbf{f}(\mathbf{x_0})\|}
+\]
+Substitute the linear approximation of $\mathbf{f}$ from Step 2 into the numerator:
+\[
+    L = \lim_{\mathbf{x} \to \mathbf{x_0}} \frac{\|\mathbf{x} - \mathbf{x_0} - [J_{\mathbf{f}}(\mathbf{x_0})]^{-1} \big( J_{\mathbf{f}}(\mathbf{x_0})(\mathbf{x} - \mathbf{x_0}) + R(\mathbf{x}) \big) \|}{\|\mathbf{f}(\mathbf{x}) - \mathbf{f}(\mathbf{x_0})\|}
+\]
+Distribute the inverse matrix. The term $[J_{\mathbf{f}}(\mathbf{x_0})]^{-1} J_{\mathbf{f}}(\mathbf{x_0})$ becomes the Identity matrix, leaving just $(\mathbf{x} - \mathbf{x_0})$, which cancels out with the first part of the numerator:
+\[
+    L = \lim_{\mathbf{x} \to \mathbf{x_0}} \frac{\|- [J_{\mathbf{f}}(\mathbf{x_0})]^{-1} R(\mathbf{x})\|}{\|\mathbf{f}(\mathbf{x}) - \mathbf{f}(\mathbf{x_0})\|}
+\]
+Using matrix norm properties ($\|AB\| \leq \|A\|\|B\|$):
+\[
+    L \leq \|[J_{\mathbf{f}}(\mathbf{x_0})]^{-1}\| \lim_{\mathbf{x} \to \mathbf{x_0}} \frac{\|R(\mathbf{x})\|}{\|\mathbf{f}(\mathbf{x}) - \mathbf{f}(\mathbf{x_0})\|}
+\]
+Multiply the top and bottom of the fraction by $\|\mathbf{x} - \mathbf{x_0}\|$:
+\[
+    L \leq \|[J_{\mathbf{f}}(\mathbf{x_0})]^{-1}\| \lim_{\mathbf{x} \to \mathbf{x_0}} \left( \frac{\|R(\mathbf{x})\|}{\|\mathbf{x} - \mathbf{x_0}\|} \cdot \frac{\|\mathbf{x} - \mathbf{x_0}\|}{\|\mathbf{f}(\mathbf{x}) - \mathbf{f}(\mathbf{x_0})\|} \right)
+\]
+Now, evaluate the pieces as $\mathbf{x} \to \mathbf{x_0}$:
+\begin{enumerate}
+    \item $\|[J_{\mathbf{f}}(\mathbf{x_0})]^{-1}\|$ is a constant.
+    \item $\frac{\|R(\mathbf{x})\|}{\|\mathbf{x} - \mathbf{x_0}\|} \to 0$ (from Step 2).
+    \item $\frac{\|\mathbf{x} - \mathbf{x_0}\|}{\|\mathbf{f}(\mathbf{x}) - \mathbf{f}(\mathbf{x_0})\|}$ is bounded by $2\|A^{-1}\|$ (from the Lipschitz property in Step 1).
+\end{enumerate}
+Because we are multiplying a constant, by zero, by a bounded number, the entire limit $L = 0$.
+
+By definition, because this limit equals 0, the inverse function $\mathbf{g_1}$ is differentiable at $\mathbf{y_0}$, and its Jacobian is exactly $[J_{\mathbf{f}}(\mathbf{x_0})]^{-1}$.
+
+Since $\mathbf y_0\in V_1$ was arbitrary, we have shown that for every $\mathbf y\in V_1$,
+\[
+J_{\mathbf g_1}(\mathbf y)=\bigl[J_{\mathbf f}(\mathbf g_1(\mathbf y))\bigr]^{-1}.
+\]
+We now prove that this Jacobian depends continuously on $\mathbf y$.
+
+First, $\mathbf g_1$ is continuous on $V_1$ because it is Lipschitz. Second, since $\mathbf f\in C^1$, the map
+\[
+\mathbf x\mapsto J_{\mathbf f}(\mathbf x)
+\]
+is continuous. Third, matrix inversion
+\[
+M\mapsto M^{-1}
+\]
+is continuous on the set of invertible matrices. Since $J_{\mathbf f}(\mathbf g_1(\mathbf y))$ is invertible for every $\mathbf y\in V_1$, it follows that the composition
+\[
+\mathbf y\mapsto J_{\mathbf g_1}(\mathbf y)
+=
+\bigl[J_{\mathbf f}(\mathbf g_1(\mathbf y))\bigr]^{-1}
+\]
+is continuous on $V_1$.
+
+Therefore, $\mathbf g_1$ is continuously differentiable on $V_1$, i.e.
+\[
+\mathbf g_1\in C^1(V_1).
+\]
+This proves the differentiability of the inverse and the formula for its Jacobian.
+\end{proof}
+
+\end{document}
